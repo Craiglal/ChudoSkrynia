@@ -1,0 +1,217 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dropdown.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script type = "text/javascript" src = "{% static 'js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lightbox.js' %}"></script>
+    <script type="text/javascript">
+        //auto expand textarea
+        var autoExpand = function (field) {
+            // Reset field height
+            field.style.height = 'inherit';
+
+            // Get the computed styles for the element
+            var computed = window.getComputedStyle(field);
+
+            // Calculate the height
+            var height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+                         + parseInt(computed.getPropertyValue('padding-top'), 10)
+                         + field.scrollHeight
+                         + parseInt(computed.getPropertyValue('padding-bottom'), 10)
+                         + parseInt(computed.getPropertyValue('border-bottom-width'), 10);
+
+            field.style.height = height + 'px';
+        };
+
+        document.addEventListener('input', function (event) {
+            if (event.target.tagName.toLowerCase() !== 'textarea') return;
+            autoExpand(event.target);
+        }, false);
+    </script>
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+
+        $('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+            if (!$(this).next().hasClass('show')) {
+            $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            }
+            var $subMenu = $(this).next(".dropdown-menu");
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+                $('.dropdown-submenu .show').removeClass("show");
+            });
+
+            return false;
+        });
+    </script>
+    <meta charset="UTF-8">
+    <title>Чудо-скриня</title>
+</head>
+
+<body>
+    {% block header %}
+        <div class="header">
+        </div>
+    {% endblock %}
+
+    {% block navbar %}
+        <div style="height: 56px; width: 100%; border-bottom: lightgray 1px solid;" class="bg-white sticky-top">
+            <div class="container">
+                <div style="padding-top: 7px; font-weight: 400;" class="float-lg-left">
+                    <a style="color: #fe6f5e;" href="{% url 'home' %}" class="navbar-brand">Чудо-Скриня</a>
+                </div>
+                <div style="padding-top: 10px" class="float-lg-right">
+                    {% with total_items=cart|length %}
+                        {% if cart|length > 0 %}
+                            <a class="btn btn-outline-shop" style="text-decoration: none" href="{% url "cart:CartDetail" %}">Ваш кошик:
+                                <span class="badge badge-cart">
+                                    {{ total_items }}
+                                </span>
+                            </a>
+                         {% else %}
+                            <a class="btn btn-outline-shop"  href="{% url "cart:CartDetail" %}">Кошик пустий</a>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+
+            <nav class="navbar navbar-expand navbar-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="container">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class='nav-link dropdown-toggle text-dark' href='#' id="navbardrop" data-toggle="dropdown">
+                                Ляльки
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item dropdown-toggle text-dark" href="#">Мотанки</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'products:Берегиня' %}">Берегиня</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Благодать' %}">Благодать</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Ведучка' %}">Ведучка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Великодня' %}">Великодня</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Вербна' %}">Вербна</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Веснянка' %}">Веснянка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Господар-блогополоч' %}">Господарочка-благополічниця</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Коза' %}">Коза</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Круп"яничка' %}">Круп'яничка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Кувадка' %}">Кувадка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Лихоманка' %}">Лихоманка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Материнство' %}">Материнство</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Мєтлушка' %}">Мєтлушка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:НаКукурудзі' %}">На кукурудзі</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:НаЩастья' %}">На щастя</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Нерозлучники' %}">Нерозлучники</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Очисна' %}">Очисна</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:ПасткаДляСнів' %}">Пастка для снів</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Подорожниця' %}">Подорожниця</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Подружжя' %}">Подружжя</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:ПодушкаПодружка' %}">Подушка-подружка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Стовбичка' %}">Стовбичка</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:ХарактернаЛялька' %}">Характерна лялька</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:ЧоловічийОбрегір' %}">Чоловічий оберіг</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'products:Янгол' %}">Янгол</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="{% url 'products:ШитіЛяльки' %}">Шиті ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="{% url 'products:В"язаніЛяльки' %}">В'язані ляльки</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class='nav-link dropdown-toggle text-dark' href='#' id="navbardrop" data-toggle="dropdown">
+                                Декупаж
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">Шиті ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">В'язані ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">В'язані ляльки</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class='nav-link dropdown-toggle text-dark' href='#' id="navbardrop" data-toggle="dropdown">
+                                Скрапбукінг
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">Шиті ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">В'язані ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">В'язані ляльки</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark" href="#">Біжутерія</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="#">Мило</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class='nav-link dropdown-toggle text-dark' href='#' id="navbardrop" data-toggle="dropdown">
+                                Серветки для декупажу
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">Шиті ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">В'язані ляльки</a></li>
+                                <li class="dropdown-submenu"><a class="nav-link dropdown-item text-dark" href="#">В'язані ляльки</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="{% url 'contact' %}">Контакти</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    {% endblock %}
+
+    {% block content %}
+        <div class="container">
+            <p>Для  описания начала начал, атеистами была сформулирована теория "Большого взрыва". В соответствии с которой, вначале вся материя Вселенной была сосредоточена в одной точке (точка сингулярности) и разогрета до очень высокой температуры. В некий момент времени произошёл ужасающей силы взрыв. В расширяющемся облаке перегретых субатомных частиц постепенно стали формироваться атомы, звезды, галактики, планеты, и наконец, зародилась жизнь.
+
+Возникает вопрос: «Кто собрал всю материю Вселенной в одну точку, потом "нажал кнопку", чтоб произошёл "Большой взрыв"?»
+
+Все знают, что при взрыве всё рушится и уничтожается. Взрыв – это разрушение и хаос. А вот в результате "Большого взрыва" появляются галактики, звезды, планеты, как будто работает заложенная программа. А может это произойти вследствие хаотичного разлёта вещества от взрыва? И почему существуют в природе определённые правила и законы, под которые учёные придумывают теории, теоремы и формулы. А то, что не смогли доказать назвали аксиомами. А по чьей и какой программе эти аксиомы существуют?
+
+Религия однозначно отвечает на этот вопрос, что это всё божественные деяния: "В начале Бог сотворил небо и землю" (Библия, Бытие 1:1). Но если обратиться к еврейскому первоисточнику Библии, то увидим, что при переводе утрачен "глубокий" образный смысл. Первые слова звучат на языке подлинника так: "Берешит бара Элоким эт ха-шамаим вэ-эт ха-арец".
+
+Слово "Элоким" есть множественное число слова Элоах (Всевышний), происходящего от корня "эле" - указательного местоимения "эти", обозначающего явления в объединенности и единстве: "все эти". Элоах - проявление Всевышнего, а Элоким – все эти проявления Всевышнего.
+
+Корень слова "бара" (сотворил) родствен корню слова "убежал", "ушел", "вырвался наружу". По чисто лингвистическому смыслу "бара" - это выход изнутри наружу. Бара Элоким - выведение из Себя Мира. Слова "бара Элоким" говорят о том, что Бог сотворил, вывел из Себя, породил Замысел Творения.
+
+Слово "бара" употреблено в первой главе три раза: в отношении сотворения неба и земли, в отношении творения жизни и творения человека. "Бара" - всегда творение из "ничего", сущего из несущего. Следующие же уровни - творение сущего из сущего.
+
+Словом "Берешит" нам указано на абсолютное Начало Мира. "Берешит" состоит из предлога "бе" (в), которое пишется слитно со словом, к которому он принадлежит и слова "решит", которое не означает начало во времени, т.к. должно было быть слово "тхила" или "каце". "Решит" всегда применяется в смысле становления нового, а не отрицания предшествующего. Т.е. "решит" - новый поворот чего-то или в чем-то, новый путь. А т.к. "Решит" в начале первой фразы, то играет роль существительного, которое происходит от слова "рош", т.е. голова. Это тот главный центр, где сходятся все центры, куда поступают все образы и смыслы Мира и который обращён к Миру.
+
+Т.е. Элоким выводит из Себя новый Центр, голову Творения, в которой главная мысль Бога, лежащая в основании всех потоков Творения и определяющая постоянно действующий в Мире Его Замысел. "Шамаим" (небо) и Земля сотворены как начаток этого Замысла Творца.
+
+"Шамаим" (небо) - множественное число слова "шам", переводимое указательным местоимением "там". "Шамаим" указывает на все то, что существует вне пределов человеческой досягаемости (Высшие не физические Миры).
+
+"Арец" нам перевели как земля, хотя Арец - это то место, та Обитель существования, в которой все с величайшей скрупулёзностью разделено, все старательно отграничено, выделено в отдельное существование (физические Миры) и т.д.
+
+Т.е. получаем, что из Всевышнего, а точнее из проявлений Всевышнего вышел весь Мир, абсолютно новый Мир, но не отрицается старый. Это очень похоже на описание из наших древних славянских источников, а именно на строки из "Книги Света". Читаем:
+
+"Некогда, вернее, тогда, когда ещё не было времён, не было Миров и Реальностей, нами, людьми, воспринимаемых, был, не воплощаясь, один только Великий РА-М-ХА (Всевышний). Он проявился в Новую Действительность и от восприятия Новой Безкрайней Безконечности озарился Великим Светом Радости. И тогда появилась Безконечная Новая Вечность, в Новой Действительности родившаяся, и безконечное число её проявлений появилось. Так появилось то, что мы, люди, как пространства Миров Яви (физический мир), Нави (навный, т.е. невидимый мир) и Прави (мир Богов) воспринимаем. Как только Великий РА-М-ХА проявился в Новую Действительность, в Безконечной Новой Вечности появилось сверхвеликое Абсолютное Нечто, а так как оно было не тем, чем является Великий РА-М-ХА, то сверхвеликое абсолютное Нечто таило в себе начаток зла, ибо всё, что с высшей точки зрения Всесовершенного несовершенно, является относительным злом. И когда Великий РА-М-ХА озарился Великим Светом Радости, от него полился Великий Поток Инглии, Первозданного Живого Света, т.е. ДыХАние Его несказанное, хлынул Свет несказанный и зазвучал в Нечто Великом… Первозданный Живой Свет гнал перед собою мглу Сверхвеликого абсолютного Нечто, Божественного Света лишённого, а в некоторых местах он пронизывал её, не оставляя следа; В других местах сиял ярчайшим Светом, великие Пространства заливал, и всё дальше и дальше лился Поток Света ослепительного…"
+
+Правда, очень похоже и на строки из Библии, и на теорию Большого Взрыва? Видим, что все описывают один и тот же процесс, только Книге Света не один десяток тысяч лет... В индийских Ведах описано, что от момента рождения Брахмы (Род) прошёл 51 год, а один день Брахмы равен 4 320 000 000 наших земных лет, его ночь имеет ту же продолжительность. Его месяц состоит из 30 таких дней и ночей, год равен 12 таким месяцам. Брахма - это первое рождённое Рамхой Существо в нашей Действительности. Наши Предки называли его Род (Род-Прародитель) от которого и ведём свой род. И мы говорим, что это мой род. Поэтому Он как бы и един и множествен одновременно.
+
+Название Брахма означает :"б" – большой, "рахма" – единый, прекрасный покров ведения. Арийский корень "рах" до сих пор живёт в славянском языке: на украинском и старорусском "рахувать" – объединять разрозненные числа, сводить к единству, "неряха" – человек, противоположный раху, т.е. красоте, опрятности, "рахта" – праздник летнего и зимнего солнцестояния.
+
+Брахма живёт 100 "лет", соответствующие в земном исчислении 311 триллионам и 40 биллионам земных лет. Через каждые 100 таких "лет", когда Брахма "умирает", происходит уничтожение Вселенной. Это означает, что энергия, проявленная Рамхой (Всевышним), опять возвращается в Рамху. Затем вновь, когда бывает нужно проявить космический мир, это происходит по воле Рамхи и Брахма рождается вновь. В китайской мифологии Земля циклически создаётся и разрушается с периодом более 23 млн. лет.
+
+Источники: интернет и Уроки Асгардского училища</p>
+        </div>
+    {% endblock %}
+
+</body>
+</html>

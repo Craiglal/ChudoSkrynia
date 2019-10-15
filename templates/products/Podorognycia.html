@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+{% block content %}
+    <div class="container" style="padding-top: 15px">
+        <h1>Подорожниця</h1>
+        <div class="row">
+            {% for elem in products %}
+                <div class="col-4">
+                    <a data-toggle="lightbox" href="{{ MEDIA_URL }}{{ elem.pictures.url }}" data-type="image" data-title="{{ elem.name }}">
+                        <img class="img-fluid" src="{{ MEDIA_URL }}{{ elem.pictures.url }}"/>
+                    </a>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            {% if elem.availability is True %}
+                                <span>Є у наявності</span>
+                            {% else %}
+                                <span>Немає у наявності</span>
+                                <br>
+                                <span>Час виготовлення:</span>
+                                {{ elem.time }}
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <span>Ціна:</span>
+                            {{ elem.price }}
+                        </li>
+                        <li class="list-group-item">
+                            <span>Довжина:</span>
+                            {{ elem.size_height }}
+                        </li>
+                        {% if elem.size_width != 0 %}
+                        <li class="list-group-item">
+                            <span>Ширина:</span>
+                            {{ elem.size_width }}
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <form action="{% url "cart:CartAdd" product_id=elem.id %}" method="post">
+                        <div>
+                            {{ cart_product_form }}
+                        </div>
+                        {% csrf_token %}
+                        <input class="btn btn-outline-dark" type="submit" value="Додати до кошику">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+</html>

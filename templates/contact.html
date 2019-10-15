@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <form class="form-group" action="/contact/" method="post">{% csrf_token %}
+        {{ form.name|as_crispy_field }}
+        {{ form.sender|as_crispy_field }}
+        {{ form.message|as_crispy_field }}
+        {{ form.copy|as_crispy_field }}
+        <input class="btn btn-outline-dark" type="submit" value="Відправити"/>
+        </form>
+    </div>
+{% endblock %}

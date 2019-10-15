@@ -1,0 +1,33 @@
+div.header {
+    background-image: url("/static/header.jpg");
+    background-repeat: repeat-x;
+    height: 95px;
+}
+
+.list-group-item:first-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: unset;
+    border-bottom-left-radius: unset;
+}
+
+.list-group-item:last-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.btn-outline-shop {
+    color: #343a40;
+    border-color: #fe6f5e;
+}
+
+.btn-outline-shop:hover {
+    color: white;
+    border-color: #fe6f5e;
+    background-color: #fe6f5e;
+}
+
+.badge-cart {
+    color: white;
+    background-color: #fe6f5e;
+}
